@@ -3,6 +3,17 @@
   hosts: app
   become: true
 
+  # vars_files:
+  #   - "vars/apache_UBUNTU.yml"
+  #   - "vars/apache_{{ ansible_os_family }}.yml"
+
+  pre_tasks:
+    - name: Load Variables
+    include_vars: "{{ item }}"
+    with_first_found:
+      - "vars/apache_UBUNTU.yml"
+      - "vars/apache_{{ ansible_os_family }}.yml"
+
   tasks:
     - name: Add an environment variable to the remote user's shell.
       lineinfile:
